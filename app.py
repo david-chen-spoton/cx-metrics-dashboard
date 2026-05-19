@@ -6,7 +6,7 @@ user = st.user
 if not user.is_logged_in:
     st.title("CX Dashboard")
     st.info("Please sign in with your SpotOn Google account to continue.")
-    st.button("Sign in with Google", on_click=st.login)
+    st.button("Sign in with Google", on_click=st.login, args=("google",))
     st.stop()
 
 if not user.email.endswith("@spoton.com"):
