@@ -2,7 +2,7 @@ import streamlit as st
 
 st.set_page_config(page_title="CX Dashboard", layout="wide")
 
-user = st.experimental_user
+user = st.user
 if not user.is_logged_in:
     st.title("CX Dashboard")
     st.info("Please sign in with your SpotOn Google account to continue.")
