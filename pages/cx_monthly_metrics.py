@@ -1,28 +1,14 @@
 import io
 import streamlit as st
-import snowflake.connector
 import pandas as pd
 from datetime import datetime
+from snowflake.snowpark.context import get_active_session
 
 # ── Snowflake connection ──────────────────────────────────────────────────────
 
-@st.cache_resource(show_spinner=False)
-def get_connection():
-    cfg = st.secrets["snowflake"]
-    return snowflake.connector.connect(
-        account=cfg["account"],
-        user=cfg["user"],
-        token=cfg["token"],
-        authenticator="programmatic_access_token",
-        role=cfg.get("role", "bi_tools_finance"),
-        warehouse=cfg.get("warehouse", "ANALYTICS_WH"),
-        database=cfg.get("database", "ANALYTICS"),
-        session_parameters={"QUERY_TAG": "streamlit_cx_dashboard"},
-    )
-
 def run_query(sql: str) -> pd.DataFrame:
-    conn = get_connection()
-    df = pd.read_sql(sql, conn)
+    session = get_active_session()
+    df = session.sql(sql).to_pandas()
     df.columns = df.columns.str.lower()
     return df
 
